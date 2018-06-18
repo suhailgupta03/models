@@ -1,0 +1,15 @@
+item {
+  id: 1
+  name: 'coca-cola'
+}
+
+item {
+  id: 2
+  name: 'master'
+}
+
+item {
+  id: 3
+  name: 'sk2'
+}
+
