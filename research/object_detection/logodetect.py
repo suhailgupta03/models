@@ -8,6 +8,7 @@ import sys
 import tarfile
 import tensorflow as tf
 import zipfile
+import json
 
 from collections import defaultdict
 from io import StringIO
@@ -57,8 +58,6 @@ def load_image_into_numpy_array(image):
 # image2.jpg
 # If you want to test the code with your images, just add path to the images to the TEST_IMAGE_PATHS.
 
-PATH_TO_TEST_IMAGES_DIR = 'test_images'
-TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'image{}.jpg'.format(i)) for i in range(1, 32) ]
 
 # Size, in inches, of the output images.
 IMAGE_SIZE = (12, 8)
@@ -107,61 +106,69 @@ def run_inference_for_single_image(image, graph):
       if 'detection_masks' in output_dict:
         output_dict['detection_masks'] = output_dict['detection_masks'][0]
   return output_dict
-for image_path in TEST_IMAGE_PATHS:
-  image = Image.open(image_path)
-  # the array based representation of the image will be used later in order to prepare the
-  # result image with boxes and labels on it.
-  image_np = load_image_into_numpy_array(image)
-  # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-  image_np_expanded = np.expand_dims(image_np, axis=0)
-  # Actual detection.
-  output_dict = run_inference_for_single_image(image_np, detection_graph)
 
-    # Visualization of the results of a detection.
-#   vis_util.visualize_boxes_and_labels_on_image_array(
-#       image_np,
-#       output_dict['detection_boxes'],
-#       output_dict['detection_classes'],
-#       output_dict['detection_scores'],
-#       category_index,
-#       instance_masks=output_dict.get('detection_masks'),
-#       use_normalized_coordinates=True,
-#       line_thickness=8)
-  width, height = image.size
-  a={}
-  a["image"]=image_path
-  c={}
-  p=[]
-  o=[]
-  
-  for i in range(0,len(output_dict["detection_scores"])):
-        c={}
-        if (output_dict["detection_scores"][i]>0.5):
-            
-            c["class"]=str(output_dict["detection_classes"][i])
-            c["prob"]=str(output_dict["detection_scores"][i])
-            box={}
-            box["x_min"]=str((output_dict["detection_boxes"][i][1])*width)
-            box["y_min"]=str((output_dict["detection_boxes"][i][0])*height)
-            box["x_max"]=str((output_dict["detection_boxes"][i][3])*width)
-            box["y_max"]=str((output_dict["detection_boxes"][i][2])*height)
-#             print ("class: "+str(output_dict["detection_classes"][i]))
-#             print ("confidence: "+str(output_dict["detection_scores"][i]))
-#             print ("ymin: "+str((output_dict["detection_boxes"][i][0])*height))
-#             print ("xmin: "+str((output_dict["detection_boxes"][i][1])*width))
-#             print ("ymax: "+str((output_dict["detection_boxes"][i][2])*height))
-#             print ("xmax: "+str((output_dict["detection_boxes"][i][3])*width))
-#             print ("*****")
-            c["box"]=box
-            p.append(c)
-        else:
-            break
-  a["problist"]=p
-  o.append(a)
-  #print ("===========================================")
-o=json.dumps(o)
-print (o)
-#   plt.figure(figsize=IMAGE_SIZE)
-#   plt.imshow(image_np)
-#   plt.savefig(image_path+".png")
+while True:
+
+	PATH_TO_TEST_IMAGES_DIR = 'test_images'
+	TEST_IMAGE_PATHS = os.listdir('test_images')
+	o = []	
+	for image_path in TEST_IMAGE_PATHS:
+	  image = Image.open("test_images/"+image_path)
+	  # the array based representation of the image will be used later in order to prepare the
+	  # result image with boxes and labels on it.
+	  image_np = load_image_into_numpy_array(image)
+	  # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
+	  image_np_expanded = np.expand_dims(image_np, axis=0)
+	  # Actual detection.
+	  output_dict = run_inference_for_single_image(image_np, detection_graph)
+
+	    # Visualization of the results of a detection.
+	#   vis_util.visualize_boxes_and_labels_on_image_array(
+	#       image_np,
+	#       output_dict['detection_boxes'],
+	#       output_dict['detection_classes'],
+	#       output_dict['detection_scores'],
+	#       category_index,
+	#       instance_masks=output_dict.get('detection_masks'),
+	#       use_normalized_coordinates=True,
+	#       line_thickness=8)
+	  width, height = image.size
+	  a={}
+	  a["image"]=image_path
+	  c={}
+	  p=[]
+	  o=[]
+	  
+	  for i in range(0,len(output_dict["detection_scores"])):
+		c={}
+		if (output_dict["detection_scores"][i]>0.5):
+		    
+		    c["class"]=str(output_dict["detection_classes"][i])
+		    c["prob"]=str(output_dict["detection_scores"][i])
+		    box={}
+		    box["x_min"]=str((output_dict["detection_boxes"][i][1])*width)
+		    box["y_min"]=str((output_dict["detection_boxes"][i][0])*height)
+		    box["x_max"]=str((output_dict["detection_boxes"][i][3])*width)
+		    box["y_max"]=str((output_dict["detection_boxes"][i][2])*height)
+	#             print ("class: "+str(output_dict["detection_classes"][i]))
+	#             print ("confidence: "+str(output_dict["detection_scores"][i]))
+	#             print ("ymin: "+str((output_dict["detection_boxes"][i][0])*height))
+	#             print ("xmin: "+str((output_dict["detection_boxes"][i][1])*width))
+	#             print ("ymax: "+str((output_dict["detection_boxes"][i][2])*height))
+	#             print ("xmax: "+str((output_dict["detection_boxes"][i][3])*width))
+	#             print ("*****")
+		    c["box"]=box
+		    p.append(c)
+		else:
+		    break
+	  a["problist"]=p
+	  o.append(a)
+	  os.remove("test_images/"+image_path)
+	  #print ("===========================================")
+	o=json.dumps(o)
+	if len(o) > 2:
+		print (o)
+	#   plt.figure(figsize=IMAGE_SIZE)
+	#   plt.imshow(image_np)
+	#   plt.savefig(image_path+".png")
 
