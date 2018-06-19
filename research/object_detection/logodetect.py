@@ -116,17 +116,52 @@ for image_path in TEST_IMAGE_PATHS:
   image_np_expanded = np.expand_dims(image_np, axis=0)
   # Actual detection.
   output_dict = run_inference_for_single_image(image_np, detection_graph)
-  # Visualization of the results of a detection.
-  vis_util.visualize_boxes_and_labels_on_image_array(
-      image_np,
-      output_dict['detection_boxes'],
-      output_dict['detection_classes'],
-      output_dict['detection_scores'],
-      category_index,
-      instance_masks=output_dict.get('detection_masks'),
-      use_normalized_coordinates=True,
-      line_thickness=8)
-  plt.figure(figsize=IMAGE_SIZE)
-  #plt.plot()
-  plt.imshow(image_np)
-  plt.savefig(image_path+"_gen_.png")
+
+    # Visualization of the results of a detection.
+#   vis_util.visualize_boxes_and_labels_on_image_array(
+#       image_np,
+#       output_dict['detection_boxes'],
+#       output_dict['detection_classes'],
+#       output_dict['detection_scores'],
+#       category_index,
+#       instance_masks=output_dict.get('detection_masks'),
+#       use_normalized_coordinates=True,
+#       line_thickness=8)
+  width, height = image.size
+  a={}
+  a["image"]=image_path
+  c={}
+  p=[]
+  o=[]
+  
+  for i in range(0,len(output_dict["detection_scores"])):
+        c={}
+        if (output_dict["detection_scores"][i]>0.5):
+            
+            c["class"]=str(output_dict["detection_classes"][i])
+            c["prob"]=str(output_dict["detection_scores"][i])
+            box={}
+            box["x_min"]=str((output_dict["detection_boxes"][i][1])*width)
+            box["y_min"]=str((output_dict["detection_boxes"][i][0])*height)
+            box["x_max"]=str((output_dict["detection_boxes"][i][3])*width)
+            box["y_max"]=str((output_dict["detection_boxes"][i][2])*height)
+#             print ("class: "+str(output_dict["detection_classes"][i]))
+#             print ("confidence: "+str(output_dict["detection_scores"][i]))
+#             print ("ymin: "+str((output_dict["detection_boxes"][i][0])*height))
+#             print ("xmin: "+str((output_dict["detection_boxes"][i][1])*width))
+#             print ("ymax: "+str((output_dict["detection_boxes"][i][2])*height))
+#             print ("xmax: "+str((output_dict["detection_boxes"][i][3])*width))
+#             print ("*****")
+            c["box"]=box
+            p.append(c)
+        else:
+            break
+  a["problist"]=p
+  o.append(a)
+  #print ("===========================================")
+o=json.dumps(o)
+print (o)
+#   plt.figure(figsize=IMAGE_SIZE)
+#   plt.imshow(image_np)
+#   plt.savefig(image_path+".png")
+
