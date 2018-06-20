@@ -129,7 +129,7 @@ def run_inference_for_single_image(image, graph):
 
 while True:
     TEST_IMAGE_PATHS = os.listdir(PATH_TO_TEST_IMAGES_DIR)
-    TEST_IMAGE_PATH = [
+    TEST_IMAGE_PATHS = [
     iname for iname in TEST_IMAGE_PATHS if re.search(r"jpe?g$", iname)]
     o = []
     for image_path in TEST_IMAGE_PATHS:
@@ -191,6 +191,7 @@ while True:
             o.append(a)
             os.remove(PATH_TO_TEST_IMAGES_DIR + "/" + image_path)
         except Exception as e:
+		print(e)
 		err.append(str(e))
 
                     
