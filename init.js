@@ -18,6 +18,7 @@ const Detector = (() => {
             let probList = JSON.parse(response)
             return { probList };
         } catch (err) {
+	    //console.log(response);
             return { err };
         }
     }
@@ -41,7 +42,8 @@ const Detector = (() => {
                 const spawnedCNN = spawn(this.CORE_ENV, args);
 
                 spawnedCNN.stdout.on('data', (data) => {
-                    let { probList, err } = _createProbList(data.toString());
+              		//console.log(data.toString());
+	      	   let { probList, err } = _createProbList(data.toString());
                     if (probList)
                         this.emit(_EVENT_MAP.DATA, probList);
                     else

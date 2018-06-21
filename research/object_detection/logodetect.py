@@ -129,12 +129,12 @@ def run_inference_for_single_image(image, graph):
 
 while True:
     TEST_IMAGE_PATHS = os.listdir(PATH_TO_TEST_IMAGES_DIR)
-    TEST_IMAGE_PATHS = [
-    iname for iname in TEST_IMAGE_PATHS if re.search(r"jpe?g$", iname)]
     o = []
+    #print (TEST_IMAGE_PATHS)
     for image_path in TEST_IMAGE_PATHS:
         try:
             image = Image.open(PATH_TO_TEST_IMAGES_DIR + "/" + image_path)
+          #  print (image_path)
             # the array based representation of the image will be used later in order to prepare the
             # result image with boxes and labels on it.
             image_np = load_image_into_numpy_array(image)
@@ -159,7 +159,7 @@ while True:
             a["image"] = image_path
             c = {}
             p = []
-            o = []
+            
 
             for i in range(0, len(output_dict["detection_scores"])):
                 c = {}
@@ -188,16 +188,17 @@ while True:
                 else:
                     break
             a["problist"] = p
-            o.append(a)
+            #o.append(a)
+            print (json.dumps(a))
+            sys.stdout.flush()
             os.remove(PATH_TO_TEST_IMAGES_DIR + "/" + image_path)
         except Exception as e:
-		print(e)
-		err.append(str(e))
+			err.append(str(e))
 
                     
-    o = json.dumps(o)
-    if len(o) > 2:
-        print (o)
+    #o = json.dumps(o)
+    #if (len(o) > 2):
+        #print (o)
     #   plt.figure(figsize=IMAGE_SIZE)
     #   plt.imshow(image_np)
     #   plt.savefig(image_path+".png")
