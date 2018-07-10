@@ -230,7 +230,7 @@ def run_inference_for_images(graph):
 #                                 writer.writerow(asus)
                                 im = Image.open(PATH_TO_TEST_IMAGES_DIR + "/" + image_path).convert('L')
                                 im = im.crop(((output_dict["detection_boxes"][i][1])*width, (output_dict["detection_boxes"][i][0])*height, (output_dict["detection_boxes"][i][3])*width,(output_dict["detection_boxes"][i][2])*height))
-                                im.save(CROPPED_FOLDER+"/"+"+"+box["x_min"]+"+"+box["y_min"]+"+"+box["x_max"]+"+"+box["y_max"]+"+"+c["prob"]+image_path)
+                                im.save(CROPPED_FOLDER+"/"+"+"+box["x_min"]+"+"+box["y_min"]+"+"+box["x_max"]+"+"+box["y_max"]+"+"+c["prob"]+"+"+image_path)
                               p.append(c)
                           else:
                               break
