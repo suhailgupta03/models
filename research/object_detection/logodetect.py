@@ -4,6 +4,7 @@ matplotlib.use('Agg')
 import os
 from dotenv import load_dotenv
 import numpy as np
+import shutil
 import six.moves.urllib as urllib
 import sys
 import tarfile
@@ -43,7 +44,7 @@ MODEL_NAME = DROOT + '/' + os.getenv('MODEL_DIR')
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
 PATH_TO_CKPT = MODEL_NAME + '/' + os.getenv('CKPT')
 
-PATH_TO_TEST_IMAGES_DIR = DROOT + '/' + os.getenv('IMAGE_DIR')
+PATH_TO_TEST_IMAGES_DIR = os.getenv('IMAGE_DIR')
 
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = os.path.join(DROOT + '/' + 'training', os.getenv('PB_TXT'))
@@ -218,9 +219,25 @@ def run_inference_for_images(graph):
                     a["problist"]=p
                     a["fps"] = time.time()-start_time
                     print (json.dumps(a))
+		    #vis_util.visualize_boxes_and_labels_on_image_array(
+                    #	image,
+                    #	output_dict['detection_boxes'],
+                    #	output_dict['detection_classes'],
+                    #	output_dict['detection_scores'],
+                    #	category_index,
+                    #	instance_masks=output_dict.get('detection_masks'),
+                    #	use_normalized_coordinates=True,
+                    #	line_thickness=8)
+		    #plt.figure(figsize=(12,8))
+		    #plt.imshow(image)
+		    #plt.savefig("/500gb/lr-results/"+image_path+".png")
                     sys.stdout.flush()
-                    os.remove(PATH_TO_TEST_IMAGES_DIR+image_path)
+		    #print(image_path)
+		    #print(os.path.join(PATH_TO_TEST_IMAGES_DIR,image_path))
+		    os.remove(os.path.join(PATH_TO_TEST_IMAGES_DIR,image_path))
+                    #shutil.move(os.path.join(PATH_TO_TEST_IMAGES_DIR,image_path),os.path.join("/500gb","lr-move",image_path))
                 except Exception as e:     # most generic exception you can catch
+		    #print(e)
                     err.append(str(e))  
 
     return a
