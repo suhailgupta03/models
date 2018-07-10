@@ -43,7 +43,7 @@ DROOT = os.getenv('CONTAINER')
 MODEL_NAME = DROOT + '/' + os.getenv('MODEL_DIR')
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
 PATH_TO_CKPT = MODEL_NAME + '/' + os.getenv('CKPT')
-
+CROPPED_FOLDER=os.getenv("CROPPED_FOLDER")
 PATH_TO_TEST_IMAGES_DIR = os.getenv('IMAGE_DIR')
 
 # List of the strings that is used to add correct label for each box.
@@ -213,12 +213,30 @@ def run_inference_for_images(graph):
                   #             print ("xmax: "+str((output_dict["detection_boxes"][i][3])*width))
                   #             print ("*****")
                               c["box"]=box
+			      area=((output_dict["detection_boxes"][i][3])*height-(output_dict["detection_boxes"][i][1])*height)*((output_dict["detection_boxes"][i][2])*width-(output_dict["detection_boxes"][i][0])*width)
+                              percent=(area/(height*width))*100
+                              #print (percent)
+                              p.append(c)
+                              if ((output_dict["detection_classes"][i]==3)and(output_dict["detection_scores"][i]>0.95)and(percent>1)):
+                                #print ("=============================================================================================================================================================================================================================================")
+                                count=count+1
+                                print ((output_dict["detection_boxes"][i][0])*height)
+                                print ((output_dict["detection_boxes"][i][2])*height)
+                                print ((output_dict["detection_boxes"][i][1])*width)
+                                print ((output_dict["detection_boxes"][i][3])*width)
+                                
+                                
+#                                 asus=[image_path,box["x_min"],box["y_min"],box["x_max"],box["y_max"],c["class"],c["prob"],percent]
+#                                 writer.writerow(asus)
+                                im = Image.open(PATH_TO_TEST_IMAGES_DIR + "/" + image_path).convert('L')
+                                im = im.crop(((output_dict["detection_boxes"][i][1])*width, (output_dict["detection_boxes"][i][0])*height, (output_dict["detection_boxes"][i][3])*width,(output_dict["detection_boxes"][i][2])*height))
+                                im.save(CROPPED_FOLDER+"+"+box["x_min"]+"+"+box["y_min"]+"+"+box["x_max"]+"+"+box["y_max"]+"+"+c["prob"]+image_path)
                               p.append(c)
                           else:
                               break
                     a["problist"]=p
                     a["fps"] = time.time()-start_time
-                    print (json.dumps(a))
+                    #print (json.dumps(a))
 		    #vis_util.visualize_boxes_and_labels_on_image_array(
                     #	image,
                     #	output_dict['detection_boxes'],
