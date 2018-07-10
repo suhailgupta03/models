@@ -22,7 +22,7 @@ dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
+gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=float(os.getenv('GPU_FRACTION')))
 err = []
 
 # This is needed since the notebook is stored in the object_detection folder.
@@ -46,6 +46,7 @@ PATH_TO_CKPT = MODEL_NAME + '/' + os.getenv('CKPT')
 CROPPED_FOLDER=os.getenv("CROPPED_FOLDER")
 PATH_TO_TEST_IMAGES_DIR = os.getenv('IMAGE_DIR')
 
+#print(PATH_TO_TEST_IMAGES_DIR)
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = os.path.join(DROOT + '/' + 'training', os.getenv('PB_TXT'))
 
@@ -133,7 +134,7 @@ def run_inference_for_single_image(image, graph):
 
 def run_inference_for_images(graph):
     with graph.as_default():
-        with tf.Session() as sess:
+        with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
             err=[]
             while True:
               TEST_IMAGE_PATHS = os.listdir(PATH_TO_TEST_IMAGES_DIR)
@@ -141,6 +142,7 @@ def run_inference_for_images(graph):
 
               for image_path in TEST_IMAGE_PATHS:
                 try:
+		    err = []
                     # Get handles to input and output tensors
                     start_time = time.time()
                     image = Image.open(PATH_TO_TEST_IMAGES_DIR + "/" + image_path)

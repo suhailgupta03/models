@@ -4,7 +4,7 @@ const { spawn } = require('child_process');
 const Detector = (() => {
 
     const _CORE_ENV = "python";
-    const _CORE_LIB = "/home/suhail.gupta/models/research/object_detection/logodetect.py";
+    const _CORE_LIB = "/home/ubuntu/logo-detection/models/research/object_detection/logodetect.py";
     const _CORE_LIB_PARAMS = "";
 
     const _EVENT_MAP = {
