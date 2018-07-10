@@ -219,7 +219,7 @@ def run_inference_for_images(graph):
                               p.append(c)
                               if ((output_dict["detection_classes"][i]==3)and(output_dict["detection_scores"][i]>0.95)and(percent>1)):
                                 #print ("=============================================================================================================================================================================================================================================")
-                                count=count+1
+                                #count=count+1
                                 print ((output_dict["detection_boxes"][i][0])*height)
                                 print ((output_dict["detection_boxes"][i][2])*height)
                                 print ((output_dict["detection_boxes"][i][1])*width)
