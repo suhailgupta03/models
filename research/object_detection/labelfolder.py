@@ -11,6 +11,7 @@ import numpy as np
 import tensorflow as tf
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=float(os.getenv('GPU_FRACTION_CLASSIFIER')))
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -124,7 +125,7 @@ if __name__ == "__main__":
 
 	  files = os.listdir(CROPPED_FOLDER)
 
-	  with tf.Session(graph=graph) as sess:
+	  with tf.Session(graph=graph,config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 	        for f in files:
 			try:
 
