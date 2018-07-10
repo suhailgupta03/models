@@ -220,17 +220,17 @@ def run_inference_for_images(graph):
                               if ((output_dict["detection_classes"][i]==3)and(output_dict["detection_scores"][i]>0.95)and(percent>1)):
                                 #print ("=============================================================================================================================================================================================================================================")
                                 #count=count+1
-                                print ((output_dict["detection_boxes"][i][0])*height)
-                                print ((output_dict["detection_boxes"][i][2])*height)
-                                print ((output_dict["detection_boxes"][i][1])*width)
-                                print ((output_dict["detection_boxes"][i][3])*width)
+                                #print ((output_dict["detection_boxes"][i][0])*height)
+                                #print ((output_dict["detection_boxes"][i][2])*height)
+                                #print ((output_dict["detection_boxes"][i][1])*width)
+                                #print ((output_dict["detection_boxes"][i][3])*width)
                                 
                                 
 #                                 asus=[image_path,box["x_min"],box["y_min"],box["x_max"],box["y_max"],c["class"],c["prob"],percent]
 #                                 writer.writerow(asus)
                                 im = Image.open(PATH_TO_TEST_IMAGES_DIR + "/" + image_path).convert('L')
                                 im = im.crop(((output_dict["detection_boxes"][i][1])*width, (output_dict["detection_boxes"][i][0])*height, (output_dict["detection_boxes"][i][3])*width,(output_dict["detection_boxes"][i][2])*height))
-                                im.save(CROPPED_FOLDER+"+"+box["x_min"]+"+"+box["y_min"]+"+"+box["x_max"]+"+"+box["y_max"]+"+"+c["prob"]+image_path)
+                                im.save(CROPPED_FOLDER+"/"+"+"+box["x_min"]+"+"+box["y_min"]+"+"+box["x_max"]+"+"+box["y_max"]+"+"+c["prob"]+image_path)
                               p.append(c)
                           else:
                               break
