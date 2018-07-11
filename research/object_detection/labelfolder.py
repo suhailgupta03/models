@@ -172,9 +172,10 @@ if __name__ == "__main__":
 					# shutil.copy("test"+"/"+f, "result/notsk2/")
 				else:
 					if (results[0] > 0.5):
+						os.remove(CROPPED_FOLDER+"/"+f)
 						# b=[f,"sk2",results[1]]
 						# shutil.copy("test"+"/"+f, "result/sk2/")
-						idk = 1
+						#idk = 1
 
 				# a.append(b)
 				# for i in top_k:
