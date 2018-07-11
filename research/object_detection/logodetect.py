@@ -43,7 +43,7 @@ DROOT = os.getenv('CONTAINER')
 MODEL_NAME = DROOT + '/' + os.getenv('MODEL_DIR')
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
 PATH_TO_CKPT = MODEL_NAME + '/' + os.getenv('CKPT')
-CROPPED_FOLDER=os.getenv("CROPPED_FOLDER")
+CROPPED_FOLDER=os.getenv("SK2_CROPPED_FOLDER")
 PATH_TO_TEST_IMAGES_DIR = os.getenv('IMAGE_DIR')
 
 #print(PATH_TO_TEST_IMAGES_DIR)
@@ -257,8 +257,8 @@ def run_inference_for_images(graph):
 		    os.remove(os.path.join(PATH_TO_TEST_IMAGES_DIR,image_path))
                     #shutil.move(os.path.join(PATH_TO_TEST_IMAGES_DIR,image_path),os.path.join("/500gb","lr-move",image_path))
                 except Exception as e:     # most generic exception you can catch
-		    #print(e)
-                    err.append(str(e))  
+		    print(e)
+                    #err.append(str(e))  
 
     return a
 
