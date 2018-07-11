@@ -164,8 +164,7 @@ if __name__ == "__main__":
 					c["box"] = box
 					p.append(c)
 					a["problist"] = p
-					a = json.dumps(a)
-					print (a)
+					print(json.dumps(a))
 					sys.stdout.flush()
 					os.remove(CROPPED_FOLDER+"/"+f)
 

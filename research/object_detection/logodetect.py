@@ -176,8 +176,10 @@ def run_inference_for_images(graph):
 				tensor_dict['detection_masks'] = tf.expand_dims(
 				    detection_masks_reframed, 0)
 			    image_tensor = tf.get_default_graph().get_tensor_by_name('image_tensor:0')
-		    except:
+		    except Exception as e:
+			    print(e)
 			    os.remove(os.path.join(PATH_TO_TEST_IMAGES_DIR,image_path))
+			    continue
 			  
 
                     # Run inference
@@ -255,7 +257,7 @@ def run_inference_for_images(graph):
 		    #plt.figure(figsize=(12,8))
 		    #plt.imshow(image)
 		    #plt.savefig("/500gb/lr-results/"+image_path+".png")
-                    sys.stdout.flush()
+                    #sys.stdout.flush()
 		    #print(image_path)
 		    #print(os.path.join(PATH_TO_TEST_IMAGES_DIR,image_path))
 		    os.remove(os.path.join(PATH_TO_TEST_IMAGES_DIR,image_path))
