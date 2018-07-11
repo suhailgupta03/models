@@ -166,6 +166,7 @@ if __name__ == "__main__":
 					a["problist"] = p
 					a = json.dumps(a)
 					print (a)
+					sys.stdout.flush()
 					os.remove(CROPPED_FOLDER+"/"+f)
 
 					# b=[f,"notsk2",results[0]]
